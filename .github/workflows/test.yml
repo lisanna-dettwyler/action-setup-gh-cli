@@ -1,0 +1,18 @@
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        runs-on: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: setup-gh-cli
+        uses: ./
+      - run: gh --version
+      - run: ${{ steps.setup-gh-cli.outputs.path }} --version

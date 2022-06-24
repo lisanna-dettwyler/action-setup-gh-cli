@@ -1,0 +1,33 @@
+name: Setup GitHub CLI
+description: Simple GitHub Action to add the GitHub CLI (gh) to your path
+inputs:
+  version:
+    description: Version of gh
+    default: 2.13.0
+outputs:
+  path:
+    description: Absolute path to the gh binary
+    value: ${{ steps.gh.outputs.path }}
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      id: jq
+      run: |
+        mkdir ${{ github.action_path }}/gh
+        if ${{ runner.os == 'Linux' }}; then
+            file_name=gh_${{ inputs.version }}_linux_amd64.tar.gz
+            out_name=${file_name%.tar.gz}/bin/gh
+        elif ${{ runner.os == 'Windows' }}; then
+            file_name=gh_${{ inputs.version }}_windows_amd64.zip
+            out_name=bin/gh.exe
+        elif ${{ runner.os == 'macOS' }}; then
+            file_name=gh_${{ inputs.version }}_macOS_amd64.tar.gz
+            out_name=${file_name%.tar.gz}/bin/gh
+        else
+            echo "Unknown runner OS \"${{ runner.os }}\""
+            exit 1
+        fi
+        wget https://github.com/cli/cli/releases/download/v${{ inputs.version }}/gh_${{ inputs.version }}_linux_amd64.tar.gz -O ${{ github.action_path }}/gh/${file_name}
+        echo ${{ github.action_path }}/$(dirname ${out_name}) >> ${GITHUB_PATH}
+        echo "::set-output name=path::${{ github.action_path }}/${out_name}"
