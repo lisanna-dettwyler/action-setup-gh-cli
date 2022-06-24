@@ -12,7 +12,7 @@ runs:
   using: composite
   steps:
     - shell: bash
-      id: jq
+      id: gh
       run: |
         mkdir ${{ github.action_path }}/gh
         if ${{ runner.os == 'Linux' }}; then
