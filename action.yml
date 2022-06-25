@@ -14,21 +14,24 @@ runs:
     - shell: bash
       id: gh
       run: |
-        mkdir ${{ github.action_path }}/gh
-        cd ${{ github.action_path }}/gh
         if ${{ runner.os == 'Linux' }}; then
             file_name=gh_${{ inputs.version }}_linux_amd64.tar.gz
             out_name=${file_name%.tar.gz}/bin/gh
+            action_path=${{ github.action_path }}
         elif ${{ runner.os == 'Windows' }}; then
             file_name=gh_${{ inputs.version }}_windows_amd64.zip
             out_name=bin/gh.exe
+            action_path=$(cygwin -u '${{ github.action_path }}')
         elif ${{ runner.os == 'macOS' }}; then
             file_name=gh_${{ inputs.version }}_macOS_amd64.tar.gz
             out_name=${file_name%.tar.gz}/bin/gh
+            action_path=${{ github.action_path }}
         else
             echo "Unknown runner OS \"${{ runner.os }}\""
             exit 1
         fi
+        mkdir ${action_path}/gh
+        cd ${action_path}/gh
         wget \
           https://github.com/cli/cli/releases/download/v${{ inputs.version }}/${file_name} \
           -O ${file_name}
@@ -37,5 +40,5 @@ runs:
         else
             unzip ${file_name}
         fi
-        echo ${{ github.action_path }}/gh/$(dirname ${out_name}) >> ${GITHUB_PATH}
-        echo "::set-output name=path::${{ github.action_path }}/gh/${out_name}"
+        echo ${action_path}/gh/$(dirname ${out_name}) >> ${GITHUB_PATH}
+        echo "::set-output name=path::${action_path}/gh/${out_name}"
