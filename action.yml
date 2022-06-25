@@ -21,7 +21,7 @@ runs:
         elif ${{ runner.os == 'Windows' }}; then
             file_name=gh_${{ inputs.version }}_windows_amd64.zip
             out_name=bin/gh.exe
-            action_path=$(cygwin -u '${{ github.action_path }}')
+            action_path=$(cygpath -u '${{ github.action_path }}')
         elif ${{ runner.os == 'macOS' }}; then
             file_name=gh_${{ inputs.version }}_macOS_amd64.tar.gz
             out_name=${file_name%.tar.gz}/bin/gh
