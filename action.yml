@@ -28,6 +28,13 @@ runs:
             echo "Unknown runner OS \"${{ runner.os }}\""
             exit 1
         fi
-        wget https://github.com/cli/cli/releases/download/v${{ inputs.version }}/gh_${{ inputs.version }}_linux_amd64.tar.gz -O ${{ github.action_path }}/gh/${file_name}
+        wget \
+          https://github.com/cli/cli/releases/download/v${{ inputs.version }}/gh_${{ inputs.version }}_linux_amd64.tar.gz \
+          -O ${{ github.action_path }}/gh/${file_name}
+        if ${{ runner.os == 'Linux' || runner.os == 'macOS' }}; then
+            tar xf ${{ github.action_path }}/gh/${file_name}
+        else
+            unzip ${{ github.action_path }}/gh/${file_name}
+        fi
         echo ${{ github.action_path }}/gh/$(dirname ${out_name}) >> ${GITHUB_PATH}
         echo "::set-output name=path::${{ github.action_path }}/gh/${out_name}"
