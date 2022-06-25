@@ -37,5 +37,5 @@ runs:
         else
             unzip ${file_name}
         fi
-        echo $(dirname ${out_name}) >> ${GITHUB_PATH}
-        echo "::set-output name=path::${out_name}"
+        echo ${{ github.action_path }}/gh/$(dirname ${out_name}) >> ${GITHUB_PATH}
+        echo "::set-output name=path::${{ github.action_path }}/gh/${out_name}"
