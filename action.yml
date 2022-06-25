@@ -30,7 +30,7 @@ runs:
             exit 1
         fi
         wget \
-          https://github.com/cli/cli/releases/download/v${{ inputs.version }}/gh_${{ inputs.version }}_linux_amd64.tar.gz \
+          https://github.com/cli/cli/releases/download/v${{ inputs.version }}/${file_name} \
           -O ${file_name}
         if ${{ runner.os == 'Linux' || runner.os == 'macOS' }}; then
             tar xf ${file_name}
