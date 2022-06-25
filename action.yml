@@ -22,6 +22,7 @@ runs:
             file_name=gh_${{ inputs.version }}_windows_amd64.zip
             out_name=bin/gh.exe
             action_path=$(cygpath -u '${{ github.action_path }}')
+            wget() { powershell -command "wget ${@}"; }
         elif ${{ runner.os == 'macOS' }}; then
             file_name=gh_${{ inputs.version }}_macOS_amd64.tar.gz
             out_name=${file_name%.tar.gz}/bin/gh
