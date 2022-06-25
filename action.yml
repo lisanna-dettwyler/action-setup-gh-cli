@@ -15,6 +15,7 @@ runs:
       id: gh
       run: |
         mkdir ${{ github.action_path }}/gh
+        cd ${{ github.action_path }}/gh
         if ${{ runner.os == 'Linux' }}; then
             file_name=gh_${{ inputs.version }}_linux_amd64.tar.gz
             out_name=${file_name%.tar.gz}/bin/gh
@@ -30,11 +31,11 @@ runs:
         fi
         wget \
           https://github.com/cli/cli/releases/download/v${{ inputs.version }}/gh_${{ inputs.version }}_linux_amd64.tar.gz \
-          -O ${{ github.action_path }}/gh/${file_name}
+          -O ${file_name}
         if ${{ runner.os == 'Linux' || runner.os == 'macOS' }}; then
-            tar xf ${{ github.action_path }}/gh/${file_name}
+            tar xf ${file_name}
         else
-            unzip ${{ github.action_path }}/gh/${file_name}
+            unzip ${file_name}
         fi
-        echo ${{ github.action_path }}/gh/$(dirname ${out_name}) >> ${GITHUB_PATH}
-        echo "::set-output name=path::${{ github.action_path }}/gh/${out_name}"
+        echo $(dirname ${out_name}) >> ${GITHUB_PATH}
+        echo "::set-output name=path::${out_name}"
