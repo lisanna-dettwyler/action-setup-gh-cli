@@ -42,4 +42,4 @@ runs:
             unzip ${file_name}
         fi
         echo ${action_path_unix}/gh/$(dirname ${out_name}) >> ${GITHUB_PATH}
-        echo "::set-output name=path::'${{ github.action_path }}'/gh/${out_name}"
+        echo ::set-output name=path::'${{ github.action_path }}'/gh/${out_name}
